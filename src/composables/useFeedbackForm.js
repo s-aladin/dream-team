@@ -1,4 +1,4 @@
-import { reactive, readonly, toRefs } from 'vue'
+import { reactive, readonly } from 'vue'
 
 const initialState = {
     fullName: '',
@@ -10,33 +10,36 @@ const initialState = {
     quickReplies: []
 }
 
-export function useFeedbackForm() {
-    const formData = reactive({ ...initialState })
+const state = reactive({ ...initialState })
 
+export function useFeedbackForm() {
     const updateFormData = (newData) => {
-        Object.assign(formData, newData)
+        Object.assign(state, newData)
     }
 
     const resetForm = () => {
-        Object.assign(formData, initialState)
+        Object.assign(state, initialState)
     }
 
     const validateStep1 = () => {
-        const { fullName, email, phone } = formData
-        if (!fullName.trim()) return false
+        const {fullName, email, phone} = state;
+        if (!fullName.trim()) return false;
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        if (!emailRegex.test(email)) return false
+        if (!emailRegex.test(email)) return false;
+
         const phoneDigits = phone.replace(/\D/g, '')
-        if (phoneDigits.length !== 11) return false
+        if (phoneDigits.length !== 11) return false;
+
         return true
     }
 
     const validateStep2 = () => {
-        return formData.rating > 0 && formData.grade !== ''
+        return state.rating > 0 && state.grade !== ''
     }
 
     return {
-        formData: readonly(formData),
+        formData: readonly(state),
         updateFormData,
         resetForm,
         validateStep1,

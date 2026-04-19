@@ -1,7 +1,7 @@
 <template>
   <div class="form form-mobile">
     <transition name="slide" mode="out-in">
-      <div v-if="step === 1" key="step1" class="mobile-step">
+      <div v-if="step === 1" key="step1" class="form-fields">
         <div class="form-field">
           <label class="form-field__label">ФИО</label>
           <input
@@ -22,21 +22,27 @@
               placeholder="example@mail.com"
           />
         </div>
-        <div class="form-field">
-          <PhoneInput
-              label="Номер телефона"
-              :modelValue="formData.phone"
-              @update:modelValue="(val) => updateField('phone', val)"
-          />
-        </div>
-
-        <div class="mobile-step__actions">
-          <button class="button button--secondary" @click="$emit('cancel')">Отменить</button>
-          <button class="button button--primary" @click="goToStep2">Далее</button>
-        </div>
+        <PhoneInput
+            label="Номер телефона"
+            :modelValue="formData.phone"
+            @update:modelValue="(val) => updateField('phone', val)"
+        />
       </div>
 
-      <div v-else key="step2" class="mobile-step">
+      <div v-else key="step2" class="form-fields">
+        <div class="form-field">
+          <RatingStars
+              :rating="formData.rating"
+              @update:rating="(val) => updateField('rating', val)"
+          />
+        </div>
+        <div class="form-field">
+          <QuickReplies
+              :selected="formData.quickReplies"
+              :rating="formData.rating"
+              @update:selected="(val) => updateField('quickReplies', val)"
+          />
+        </div>
         <div class="form-field">
           <label class="form-field__label">Дополнительная информация</label>
           <textarea
@@ -49,63 +55,79 @@
         </div>
         <div class="form-field">
           <label class="form-field__label">Грейд</label>
-          <select
-              class="form-field__select"
-              :value="formData.grade"
-              @change="updateField('grade', $event.target.value)"
-          >
-            <option value="" disabled>Выберите</option>
-            <option value="junior">Junior</option>
-            <option value="middle">Middle</option>
-            <option value="senior">Senior</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label class="form-field__label">Оценка</label>
-          <RatingStars
-              :rating="formData.rating"
-              @update:rating="(val) => updateField('rating', val)"
+          <CustomSelect
+              :modelValue="formData.grade"
+              :options="gradeOptions"
+              placeholder="Выберите"
+              @update:modelValue="(val) => updateField('grade', val)"
           />
-        </div>
-        <div class="form-field">
-          <label class="form-field__label">Быстрые ответы</label>
-          <QuickReplies
-              :selected="formData.quickReplies"
-              @update:selected="(val) => updateField('quickReplies', val)"
-          />
-        </div>
-
-        <div class="mobile-step__actions">
-          <button class="button button--secondary" @click="step = 1">Назад</button>
-          <button class="button button--primary" @click="$emit('submit')">Отправить</button>
         </div>
       </div>
     </transition>
+
+    <div class="form__bottom">
+      <progress-bar :step="step" :step1-progress="step1Progress" />
+
+      <div class="form__actions form__actions-mobile">
+        <button class="button button--secondary" @click="handleBack">
+          {{ step === 1 ? 'Отменить' : 'Назад' }}
+        </button>
+        <button class="button button--primary" @click="handleSubmit">
+          {{ step === 1 ? 'Далее' : 'Отправить' }}
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useFeedbackForm } from '../composables/useFeedbackForm.js'
-import PhoneInput from '@/components/fields/PhoneInput.vue'
-import RatingStars from '@/components/fields/RatingStars.vue'
-import QuickReplies from '@/components/fields/QuickReplies.vue'
+import { ref, computed } from 'vue';
+import { useFeedbackForm } from '../composables/useFeedbackForm.js';
+import PhoneInput from '@/components/fields/PhoneInput.vue';
+import RatingStars from '@/components/fields/RatingStars.vue';
+import QuickReplies from '@/components/fields/QuickReplies.vue';
+import ProgressBar from "@/components/UI/ProgressBar.vue";
+import CustomSelect from "@/components/UI/CustomSelect.vue";
 
-defineProps({ formData: Object })
-const emit = defineEmits(['update:formData', 'cancel', 'submit', 'error'])
+const emit = defineEmits(['cancel', 'submit', 'error']);
 
-const step = ref(1)
-const { validateStep1 } = useFeedbackForm()
+const step = ref(1);
+const { formData, updateFormData, validateStep1 } = useFeedbackForm();
+
+const gradeOptions = [
+  { value: 'junior', label: 'Junior' },
+  { value: 'middle', label: 'Middle' },
+  { value: 'senior', label: 'Senior' },
+  { value: 'lead', label: 'Team lead' }
+];
 
 const updateField = (field, value) => {
-  emit('update:formData', { [field]: value })
-}
+  updateFormData({ [field]: value });
+};
 
 const goToStep2 = () => {
   if (validateStep1()) {
-    step.value = 2
+    step.value = 2;
   } else {
-    emit('error')
+    emit('error');
   }
-}
+};
+
+const step1Progress = computed(() => {
+  const fields = [
+    formData.fullName.trim(),
+    formData.email.trim(),
+    formData.phone.trim()
+  ];
+  const filledCount = fields.filter(field => field !== '').length;
+  return filledCount / 3;
+});
+
+const handleBack = () => {
+  step.value === 2 ? (step.value = 1) : emit('cancel');
+};
+
+const handleSubmit = () => {
+  step.value === 2 ? emit('submit') : goToStep2();
+};
 </script>

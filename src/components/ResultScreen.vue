@@ -7,7 +7,7 @@
     <img v-if="isError" src="../assets/images/Error.png" alt="Error">
     <img v-else src="../assets/images/Success.png" alt="Success">
     <div class="result-screen__actions">
-      <button class="button button--secondary" @click="$emit('back')">
+      <button v-if="isError" class="button button--secondary" @click="$emit('back')">
         Закрыть
       </button>
       <button class="button button--primary" @click="$emit('back')">

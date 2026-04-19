@@ -1,11 +1,11 @@
 <template>
   <div class="app">
-    <FeedbackFormController />
+    <FormController />
   </div>
 </template>
 
 <script setup>
-import FeedbackFormController from './components/FeedbackFormController.vue'
+import FormController from './components/FormController.vue'
 </script>
 
 <style lang="scss" scoped>
@@ -14,7 +14,11 @@ import FeedbackFormController from './components/FeedbackFormController.vue'
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 68px 20px 0 20px;
+  padding: 68px 20px;
   background-color: #D9DBE9;
+
+  @media (max-width: 767px) {
+    padding: 28px 12px;
+  }
 }
 </style>
