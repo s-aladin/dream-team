@@ -1,6 +1,6 @@
 <template>
   <div class="form form-mobile">
-    <transition name="slide" mode="out-in">
+    <transition :name="transitionName" mode="out-in">
       <div v-if="step === 1" key="step1" class="form-fields">
         <div class="form-field">
           <label class="form-field__label">ФИО</label>
@@ -92,8 +92,8 @@ import CustomSelect from "@/components/UI/CustomSelect.vue";
 const emit = defineEmits(['cancel', 'submit', 'error']);
 
 const step = ref(1);
+const direction = ref('forward');
 const { formData, updateFormData, validateStep1 } = useFeedbackForm();
-
 const gradeOptions = [
   { value: 'junior', label: 'Junior' },
   { value: 'middle', label: 'Middle' },
@@ -107,6 +107,7 @@ const updateField = (field, value) => {
 
 const goToStep2 = () => {
   if (validateStep1()) {
+    direction.value = 'forward';
     step.value = 2;
   } else {
     emit('error');
@@ -123,8 +124,17 @@ const step1Progress = computed(() => {
   return filledCount / 3;
 });
 
+const transitionName = computed(() => {
+  return direction.value === 'forward' ? 'slide-forward' : 'slide-back';
+});
+
 const handleBack = () => {
-  step.value === 2 ? (step.value = 1) : emit('cancel');
+  if (step.value === 2) {
+    direction.value = 'back';
+    step.value = 1;
+  } else {
+    emit('cancel');
+  }
 };
 
 const handleSubmit = () => {

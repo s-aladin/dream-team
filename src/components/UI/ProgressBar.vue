@@ -53,6 +53,7 @@ const lineFillWidth = computed(() => {
 <style lang="scss" scoped>
 .progress-bar {
   width: 100%;
+  padding: 0 34px;
   margin-bottom: 20px;
 
   &__steps {
@@ -62,35 +63,34 @@ const lineFillWidth = computed(() => {
   }
 
   &__step {
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     background-color: #eff0f6;
+    color: #6F6C90;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
 
-    &--active {
-      background-color: #4a3aff;
-    }
-
+    &--active,
     &--completed {
       background-color: #4a3aff;
+      color: #FFF;
     }
   }
 
   &__number {
     font-size: 16px;
-    font-weight: 700;
-    color: #fff;
+    line-height: 18px;
+    font-weight: 500;
   }
 
   &__line {
     flex: 1;
     height: 6px;
     background-color: #eff0f6;
-    margin: 0 8px;
+    margin: 0 16px;
     border-radius: 3px;
     overflow: hidden;
   }
