@@ -1,38 +1,45 @@
-# dream-team
+# Форма обратной связи
 
-This template should help get you started developing with Vue 3 in Vite.
+Одностраничное приложение на Vue 3 с адаптивной формой обратной связи. Поддерживает пошаговое заполнение на мобильных устройствах и единую расширенную форму на десктопе. Реализована клиентская валидация полей с debounce, кастомные элементы (звёзды рейтинга, селект, быстрые ответы) с клавиатурной навигацией и ARIA-атрибутами.
 
-## Recommended IDE Setup
+## Стек
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **Vue 3** (Composition API, `<script setup>`)
+- **Vite**
+- **SCSS** (переменные, миксины, модульная структура)
+- **Composables** (управление формой через `useFeedbackForm`)
 
-## Recommended Browser Setup
+## Структура проекта
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```
+src/
+├── assets/
+│   ├── images/
+│   └── styles/              # глобальные SCSS: переменные, типографика, анимации, сетка
+├── components/
+│   ├── fields/              # FieldInput, TextareaInput, RatingStars, QuickReplies, PhoneInput
+│   ├── UI/                  # CustomSelect, ProgressBar, StarIcon
+│   ├── DesktopForm.vue
+│   ├── MobileForm.vue
+│   ├── FormController.vue
+│   └── ResultScreen.vue
+├── composables/
+│   └── useFeedbackForm.js   # состояние формы, валидация, debounce
+├── constants/
+│   └── feedbackFormConstants.js
+├── App.vue
+└── main.js
 ```
 
-### Compile and Hot-Reload for Development
+## Особенности
+Адаптивность: десктопная и мобильная версии, определение через window.innerWidth с debounce.
 
-```sh
-npm run dev
-```
+Валидация: пошаговая при сабмите и инкрементальная (с debounce 500 мс) на уровне отдельных полей.
 
-### Compile and Minify for Production
+Доступность: role, aria-expanded, aria-selected, role="combobox" в кастомном селекте, radiogroup для звёзд рейтинга, связки for/id на инпутах.
 
-```sh
-npm run build
-```
+Клавиатурная навигация: полностью поддерживается в селекте (Enter, Esc, стрелки), рейтинге и кнопках.
+
+Архитектура: composable для логики формы, константы вынесены, стили разделены на паршалы с SCSS-переменными и миксинами.
+
+Анимации: плавные переходы между экранами и шагами (fade, slide).
