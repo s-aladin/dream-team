@@ -7,7 +7,7 @@
             @update:rating="(val) => updateField('rating', val)"
         />
       </div>
-      <div class="form-field">
+      <div class="form-field" v-show="formData.rating > 0">
         <QuickReplies
             :selected="formData.quickReplies"
             :rating="formData.rating"
