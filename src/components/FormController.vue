@@ -30,6 +30,7 @@ import ResultScreen from './ResultScreen.vue';
 const showResultScreen = ref(false);
 const isError = ref(false);
 const isMobile = ref(false);
+let resizeTimer = null;
 
 const { resetForm, validateStep1, validateStep2, formData } = useFeedbackForm();
 
@@ -37,13 +38,19 @@ const checkMobile = () => {
   isMobile.value = window.innerWidth <= 767;
 };
 
+const debouncedCheckMobile = () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(checkMobile, 100);
+};
+
 onMounted(() => {
   checkMobile();
-  window.addEventListener('resize', checkMobile);
+  window.addEventListener('resize', debouncedCheckMobile);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile);
+  window.removeEventListener('resize', debouncedCheckMobile);
+  clearTimeout(resizeTimer);
 });
 
 const handleSubmit = () => {
