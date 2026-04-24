@@ -22,7 +22,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-import { useFeedbackForm } from '@/composables/useFeedbackForm.js';
+import { provideFeedbackForm } from '@/composables/useFeedbackForm.js';
 import DesktopForm from './DesktopForm.vue';
 import MobileForm from './MobileForm.vue';
 import ResultScreen from './ResultScreen.vue';
@@ -32,7 +32,7 @@ const isError = ref(false);
 const isMobile = ref(false);
 let resizeTimer = null;
 
-const { resetForm, validateStep1, validateStep2, formData } = useFeedbackForm();
+const { resetForm, validateStep1, validateStep2, formData } = provideFeedbackForm();
 
 const checkMobile = () => {
   isMobile.value = window.innerWidth <= 767;
