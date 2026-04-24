@@ -1,6 +1,22 @@
 <template>
-  <div class="custom-select" ref="selectRef">
-    <div class="custom-select__trigger" @click="toggleDropdown" :class="{ 'is-open': isOpen }">
+  <div
+      class="custom-select"
+      ref="selectRef"
+      role="combobox"
+      :aria-expanded="isOpen"
+      aria-haspopup="listbox"
+      :aria-controls="listId"
+      @focusout="handleFocusOut"
+  >
+    <div
+        class="custom-select__trigger"
+        :class="{ 'is-open': isOpen }"
+        @click="toggleDropdown"
+        @keydown="handleTriggerKeydown"
+        role="button"
+        tabindex="0"
+        aria-label="Выбор грейда"
+    >
       <span class="custom-select__value" :class="{ 'is-placeholder': !selectedLabel }">
         {{ selectedLabel || placeholder }}
       </span>
@@ -11,13 +27,28 @@
       </span>
     </div>
     <transition name="dropdown-fade">
-      <div v-if="isOpen" class="custom-select__dropdown">
+      <div
+          v-if="isOpen"
+          :id="listId"
+          class="custom-select__dropdown"
+          role="listbox"
+          :aria-label="placeholder"
+          tabindex="-1"
+          @keydown="handleListKeydown"
+      >
         <div
-            v-for="option in options"
+            v-for="(option, index) in options"
             :key="option.value"
             class="custom-select__option"
-            :class="{ 'is-selected': modelValue === option.value }"
+            :class="{
+            'is-selected': modelValue === option.value,
+            'is-focused': activeIndex === index
+          }"
+            role="option"
+            :aria-selected="modelValue === option.value"
             @click="selectOption(option)"
+            :tabindex="-1"
+            :ref="el => setOptionRef(el, index)"
         >
           {{ option.label }}
         </div>
@@ -27,7 +58,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, nextTick, useId } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -49,6 +80,9 @@ const emit = defineEmits(['update:modelValue']);
 
 const isOpen = ref(false);
 const selectRef = ref(null);
+const activeIndex = ref(-1);
+const optionRefs = ref([]);
+const listId = useId();
 
 const selectedLabel = computed(() => {
   const selected = props.options.find(opt => opt.value === props.modelValue);
@@ -57,10 +91,19 @@ const selectedLabel = computed(() => {
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
+  if (isOpen.value) {
+    const selectedIdx = props.options.findIndex(opt => opt.value === props.modelValue);
+    activeIndex.value = selectedIdx >= 0 ? selectedIdx : 0;
+
+    nextTick(() => {
+      focusActiveOption();
+    });
+  }
 };
 
 const closeDropdown = () => {
   isOpen.value = false;
+  selectRef.value?.querySelector('.custom-select__trigger')?.focus();
 };
 
 const selectOption = (option) => {
@@ -70,8 +113,69 @@ const selectOption = (option) => {
 
 const handleClickOutside = (event) => {
   if (selectRef.value && !selectRef.value.contains(event.target)) {
+    isOpen.value = false;
+  }
+};
+
+const handleFocusOut = (e) => {
+  if (selectRef.value && !selectRef.value.contains(e.relatedTarget)) {
+    isOpen.value = false;
+  }
+};
+
+const handleTriggerKeydown = (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    toggleDropdown();
+  } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (!isOpen.value) {
+      isOpen.value = true;
+      const selectedIdx = props.options.findIndex(opt => opt.value === props.modelValue);
+      activeIndex.value = selectedIdx >= 0 ? selectedIdx : 0;
+      nextTick(() => focusActiveOption());
+    } else {
+      if (e.key === 'ArrowDown') {
+        activeIndex.value = (activeIndex.value + 1) % props.options.length;
+      } else if (e.key === 'ArrowUp') {
+        activeIndex.value = (activeIndex.value - 1 + props.options.length) % props.options.length;
+      }
+      focusActiveOption();
+    }
+  } else if (e.key === 'Escape') {
     closeDropdown();
   }
+};
+
+const handleListKeydown = (e) => {
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    activeIndex.value = (activeIndex.value + 1) % props.options.length;
+    focusActiveOption();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    activeIndex.value = (activeIndex.value - 1 + props.options.length) % props.options.length;
+    focusActiveOption();
+  } else if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    if (activeIndex.value >= 0) {
+      selectOption(props.options[activeIndex.value]);
+    }
+  } else if (e.key === 'Escape') {
+    e.preventDefault();
+    closeDropdown();
+  }
+};
+
+const focusActiveOption = () => {
+  const optionEl = optionRefs.value[activeIndex.value];
+  if (optionEl) {
+    optionEl.focus();
+  }
+};
+
+const setOptionRef = (el, index) => {
+  optionRefs.value[index] = el;
 };
 
 onMounted(() => {
@@ -156,6 +260,11 @@ onUnmounted(() => {
 
     &:hover {
       background-color: #F7F7FB;
+    }
+
+    &.is-focused {
+      background-color: #F7F7FB;
+      outline: none;
     }
 
     &.is-selected {
