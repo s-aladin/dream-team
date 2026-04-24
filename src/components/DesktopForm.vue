@@ -15,26 +15,19 @@
         />
       </div>
       <div class="form-fields-row">
-        <div class="form-field">
-          <label class="form-field__label">ФИО</label>
-          <input
-              class="form-field__input"
-              type="text"
-              :value="formData.fullName"
-              @input="updateField('fullName', $event.target.value)"
-              placeholder="Иван Иванов"
-          />
-        </div>
-        <div class="form-field">
-          <label class="form-field__label">Почта</label>
-          <input
-              class="form-field__input"
-              type="email"
-              :value="formData.email"
-              @input="updateField('email', $event.target.value)"
-              placeholder="example@mail.com"
-          />
-        </div>
+        <FieldInput
+            label="ФИО"
+            :modelValue="formData.fullName"
+            @update:modelValue="(val) => updateField('fullName', val)"
+            placeholder="Иван Иванов"
+        />
+        <FieldInput
+            label="Почта"
+            type="email"
+            :modelValue="formData.email"
+            @update:modelValue="(val) => updateField('email', val)"
+            placeholder="example@mail.com"
+        />
       </div>
       <div class="form-fields-row">
         <PhoneInput
@@ -52,16 +45,13 @@
           />
         </div>
       </div>
-      <div class="form-field">
-        <label class="form-field__label">Дополнительная информация</label>
-        <textarea
-            class="form-field__textarea"
-            :value="formData.additionalInfo"
-            @input="updateField('additionalInfo', $event.target.value)"
-            placeholder="Что понравилось и не понравилось"
-            rows="4"
-        />
-      </div>
+      <TextareaInput
+          label="Дополнительная информация"
+          :modelValue="formData.additionalInfo"
+          @update:modelValue="(val) => updateField('additionalInfo', val)"
+          placeholder="Что понравилось и не понравилось"
+          :rows="4"
+      />
     </div>
 
     <div class="form__actions form__actions-desktop">
@@ -82,6 +72,8 @@ import RatingStars from '@/components/fields/RatingStars.vue';
 import QuickReplies from '@/components/fields/QuickReplies.vue';
 import CustomSelect from "@/components/UI/CustomSelect.vue";
 import { gradeOptions } from '@/constants/feedbackFormConstants.js';
+import FieldInput from "@/components/fields/FieldInput.vue";
+import TextareaInput from "@/components/fields/TextareaInput.vue";
 
 const emit = defineEmits(['cancel', 'submit']);
 
