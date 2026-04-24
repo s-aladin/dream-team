@@ -1,0 +1,82 @@
+@use 'variables' as *;
+@use 'typography' as *;
+
+.form-field {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: $spacing-xs;
+  position: relative;
+
+  &__label {
+    @include P-small;
+    color: $color-600;
+  }
+
+  &__input,
+  &__textarea {
+    width: 100%;
+    padding: 13px 15px;
+    @include P-base;
+    border: 1px solid $color-200;
+    border-radius: $radius-sm;
+    background-color: $color-200;
+
+    &:hover {
+      border-color: $color-400;
+    }
+
+    &:focus {
+      border-color: $color-primary;
+      outline: none;
+    }
+
+    &::placeholder {
+      @include P-base;
+      color: $color-500;
+    }
+
+    &--error {
+      background-color: $color-danger-bg;
+      border-color: $color-danger;
+
+      &:focus,
+      &:hover {
+        background-color: $color-danger-bg;
+        border-color: $color-danger;
+      }
+    }
+  }
+
+  &__textarea {
+    resize: none;
+  }
+
+  &__error {
+    position: absolute;
+    @include P-small;
+    bottom: 0;
+    left: 0;
+    transform: translateY(100%);
+    color: $color-danger;
+  }
+
+  // Адаптив
+  @media (max-width: $breakpoint-mobile) {
+    &__input,
+    &__textarea {
+      padding: 9px 15px;
+      @include P-small;
+
+      &::placeholder {
+        @include P-small;
+      }
+    }
+
+    &__error {
+      @include P-mini;
+    }
+  }
+}

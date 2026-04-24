@@ -10,7 +10,7 @@
   >
     <div
         class="custom-select__trigger"
-        :class="{ 'is-open': isOpen }"
+        :class="[{ 'is-open': isOpen }, { 'custom-select__trigger--error': error }]"
         @click="toggleDropdown"
         @keydown="handleTriggerKeydown"
         role="button"
@@ -73,7 +73,8 @@ const props = defineProps({
   placeholder: {
     type: String,
     default: 'Выберите'
-  }
+  },
+  error: { type: String, default: '' }
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -188,6 +189,9 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@use '@/assets/styles/variables' as *;
+@use '@/assets/styles/typography' as *;
+
 .custom-select {
   position: relative;
   width: 100%;
@@ -196,11 +200,10 @@ onUnmounted(() => {
   &__trigger {
     width: 100%;
     padding: 13px 15px;
-    font-size: 16px;
-    line-height: 28px;
-    border: 1px solid #F7F7FB;
-    border-radius: 8px;
-    background-color: #F7F7FB;
+    @include P-base;
+    border: 1px solid $color-200;
+    border-radius: $radius-sm;
+    background-color: $color-200;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -208,29 +211,40 @@ onUnmounted(() => {
     transition: border-color 0.2s;
 
     &:hover {
-      border-color: #D9DBE9;
+      border-color: $color-400;
     }
 
     &.is-open {
-      border-color: #4A3AFF;
+      border-color: $color-primary;
+    }
+
+    &--error {
+      background-color: $color-danger-bg;
+      border-color: $color-danger;
+
+      &:focus,
+      &:hover {
+        background-color: $color-danger-bg;
+        border-color: $color-danger;
+      }
     }
   }
 
   &__value {
-    color: #1F2937;
+    color: $color-700;
 
     &.is-placeholder {
-      color: #94a3b8;
+      color: $color-500;
     }
   }
 
   &__arrow {
     display: inline-flex;
-    color: #A0A3BD;
+    color: $color-500;
     transition: transform 0.2s ease;
 
     &.is-open {
-      color: #4A3AFF;
+      color: $color-primary;
       transform: rotate(180deg);
     }
   }
@@ -240,36 +254,35 @@ onUnmounted(() => {
     top: calc(100% + 4px);
     left: 0;
     right: 0;
-    background: #FFFFFF;
-    border: 1px solid #F7F7FB;
-    border-radius: 8px;
+    background: $color-100;
+    border: 1px solid $color-200;
+    border-radius: $radius-sm;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 10;
     max-height: 216px;
     overflow-y: auto;
-    padding: 4px 0;
+    padding: $spacing-xs 0;
   }
 
   &__option {
     padding: 13px 16px;
-    font-size: 16px;
-    line-height: 28px;
-    color: #1F2937;
+    @include P-base;
+    color: $color-800;
     cursor: pointer;
     transition: background-color 0.15s;
 
     &:hover {
-      background-color: #F7F7FB;
+      background-color: $color-200;
     }
 
     &.is-focused {
-      background-color: #F7F7FB;
+      background-color: $color-200;
       outline: none;
     }
 
     &.is-selected {
-      background-color: #4A3AFF;
-      color: #FFFFFF;
+      background-color: $color-primary;
+      color: $color-100;
 
       &:hover {
         background-color: #3A2ACC;
@@ -288,12 +301,11 @@ onUnmounted(() => {
   transform: translateY(-8px);
 }
 
-@media (max-width: 767px) {
+@media (max-width: $breakpoint-mobile) {
   .custom-select {
     &__trigger {
       padding: 11px 15px;
-      font-size: 14px;
-      line-height: 20px;
+      @include P-small;
     }
 
     &__dropdown {
@@ -302,8 +314,7 @@ onUnmounted(() => {
 
     &__option {
       padding: 12px 16px;
-      font-size: 14px;
-      line-height: 20px;
+      @include P-small;
     }
   }
 }

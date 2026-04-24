@@ -46,6 +46,7 @@
               :options="gradeOptions"
               placeholder="Выберите"
               @update:modelValue="(val) => updateField('grade', val)"
+              :error="errors.grade"
           />
           <span v-if="errors.grade" class="form-field__error">{{ errors.grade }}</span>
         </div>

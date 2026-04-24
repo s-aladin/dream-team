@@ -1,0 +1,116 @@
+@use 'variables' as *;
+
+@mixin H-h1 {
+  font-family: $font-family-base;
+  font-weight: 700;
+  font-size: 50px;
+  line-height: 62px;
+  letter-spacing: $letter-spacing-base;
+}
+
+@mixin H-h2 {
+  font-family: $font-family-base;
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 46px;
+  letter-spacing: $letter-spacing-base;
+}
+
+@mixin H-h3 {
+  font-family: $font-family-base;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 35px;
+  letter-spacing: $letter-spacing-base;
+}
+
+@mixin H-h4 {
+  font-family: $font-family-base;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 28px;
+  letter-spacing: $letter-spacing-base;
+}
+
+@mixin H-h5 {
+  font-family: $font-family-base;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: $letter-spacing-base;
+}
+
+@mixin P-base {
+  font-family: $font-family-base;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 28px;
+  letter-spacing: $letter-spacing-base;
+}
+
+@mixin P-small {
+  font-family: $font-family-base;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: $letter-spacing-base;
+}
+
+@mixin P-mini {
+  font-family: $font-family-base;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: $letter-spacing-base;
+}
+
+@mixin P-base-bold {
+  font-family: $font-family-base;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 28px;
+  letter-spacing: $letter-spacing-base;
+}
+
+@mixin P-small-bold {
+  font-family: $font-family-base;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: $letter-spacing-base;
+}
+
+@mixin P-mini-bold {
+  font-family: $font-family-base;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: $letter-spacing-base;
+}
+
+@mixin P-base-link {
+  font-family: $font-family-base;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 28px;
+  letter-spacing: $letter-spacing-base;
+  text-decoration: underline;
+}
+
+@mixin P-small-link {
+  font-family: $font-family-base;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: $letter-spacing-base;
+  text-decoration: underline;
+}
+
+@mixin P-mini-link {
+  font-family: $font-family-base;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: $letter-spacing-base;
+  text-decoration: underline;
+}

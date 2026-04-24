@@ -22,3 +22,41 @@
 
   defineProps({isError: Boolean});
 </script>
+
+<style lang="scss" scoped>
+@use '@/assets/styles/variables' as *;
+
+.result-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 95px;
+
+  @media (max-width: $breakpoint-mobile) {
+    gap: $spacing-3xl;
+  }
+
+  &__title {
+    margin-bottom: $spacing-sm;
+
+    @media (max-width: $breakpoint-mobile) {
+      margin-bottom: $spacing-xs;
+    }
+  }
+
+  &__actions {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-xl;
+
+    @media (max-width: $breakpoint-mobile) {
+      flex-direction: column-reverse;
+      align-items: stretch;
+      gap: $spacing-lg;
+    }
+  }
+}
+</style>

@@ -1,0 +1,68 @@
+@use 'variables' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-2xl;
+  width: 100%;
+
+  @media (max-width: $breakpoint-mobile) {
+    justify-content: space-between;
+    min-height: 438px;
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: $spacing-lg;
+
+    @media (max-width: $breakpoint-mobile) {
+      gap: $spacing-md;
+      min-height: 538px;
+    }
+  }
+
+  &__title {
+    margin-bottom: $spacing-sm;
+    @media (max-width: $breakpoint-mobile) {
+      margin-bottom: $spacing-xs;
+    }
+  }
+
+  &-fields {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-xl;
+    width: 100%;
+
+    @media (max-width: $breakpoint-mobile) {
+      gap: $spacing-md;
+    }
+
+    &-row {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: $spacing-xl;
+
+      .form-field {
+        max-width: calc((100% - #{$spacing-xl}) / 2);
+      }
+    }
+  }
+
+  &__actions {
+    width: 100%;
+    display: flex;
+    gap: $spacing-xl;
+  }
+
+  &__bottom {
+    width: 100%;
+  }
+}

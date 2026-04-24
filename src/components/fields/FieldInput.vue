@@ -25,6 +25,7 @@ defineProps({
   error: { type: String, default: '' }
 })
 
-const emit = defineEmits(['update:modelValue'])
-const fieldId = useId()
+const emit = defineEmits(['update:modelValue']);
+
+const fieldId = useId();
 </script>

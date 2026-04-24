@@ -1,0 +1,47 @@
+@use 'variables' as *;
+@use 'typography' as *;
+
+.button {
+  @include P-base;
+  padding: 13px 43px;
+  border: 1px solid $color-primary;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  flex: 1;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &--primary {
+    background-color: $color-primary;
+    color: $color-100;
+
+    &:hover {
+      background-color: #2A1CCA;
+    }
+
+    &:focus {
+      background-color: #191086;
+    }
+  }
+
+  &--secondary {
+    background-color: $color-100;
+    color: $color-primary;
+
+    &:hover {
+      background-color: $color-200;
+    }
+
+    &:focus {
+      background-color: $color-400;
+    }
+  }
+
+  @media (max-width: $breakpoint-mobile) {
+    @include P-small;
+    padding: 11px 7px;
+  }
+}
