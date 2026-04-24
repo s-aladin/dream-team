@@ -65,10 +65,10 @@
     </div>
 
     <div class="form__actions form__actions-desktop">
-      <button class="button button--secondary" @click="$emit('cancel')">
+      <button class="button button--secondary" @click="emit('cancel')">
         Отменить
       </button>
-      <button class="button button--primary" @click="$emit('submit')">
+      <button class="button button--primary" @click="emit('submit')">
         Отправить
       </button>
     </div>
@@ -76,13 +76,13 @@
 </template>
 
 <script setup>
-import { useFeedbackForm } from '../composables/useFeedbackForm.js';
+import { useFeedbackForm } from '@/composables/useFeedbackForm.js';
 import PhoneInput from '@/components/fields/PhoneInput.vue';
 import RatingStars from '@/components/fields/RatingStars.vue';
 import QuickReplies from '@/components/fields/QuickReplies.vue';
 import CustomSelect from "@/components/UI/CustomSelect.vue";
 
-defineEmits(['cancel', 'submit']);
+const emit = defineEmits(['cancel', 'submit']);
 
 const { formData, updateFormData } = useFeedbackForm();
 

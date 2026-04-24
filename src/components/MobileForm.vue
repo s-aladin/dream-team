@@ -82,7 +82,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useFeedbackForm } from '../composables/useFeedbackForm.js';
+import { useFeedbackForm } from '@/composables/useFeedbackForm.js';
 import PhoneInput from '@/components/fields/PhoneInput.vue';
 import RatingStars from '@/components/fields/RatingStars.vue';
 import QuickReplies from '@/components/fields/QuickReplies.vue';

@@ -22,7 +22,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-import { useFeedbackForm } from '../composables/useFeedbackForm.js';
+import { useFeedbackForm } from '@/composables/useFeedbackForm.js';
 import DesktopForm from './DesktopForm.vue';
 import MobileForm from './MobileForm.vue';
 import ResultScreen from './ResultScreen.vue';
