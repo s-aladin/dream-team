@@ -8,6 +8,7 @@
 - **Vite**
 - **SCSS** (переменные, миксины, модульная структура)
 - **Composables** (управление формой через `useFeedbackForm`)
+- **Vitests**
 
 ## Структура проекта
 
@@ -24,6 +25,7 @@ src/
 │   ├── FormController.vue
 │   └── ResultScreen.vue
 ├── composables/
+│   ├── __tests__            # unit-тесты
 │   └── useFeedbackForm.js   # состояние формы, валидация, debounce
 ├── constants/
 │   └── feedbackFormConstants.js
