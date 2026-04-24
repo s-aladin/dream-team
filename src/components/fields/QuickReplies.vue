@@ -17,6 +17,7 @@
 
 <script setup>
 import { computed, watch } from 'vue';
+import { quickRepliesMap } from '@/constants/feedbackFormConstants.js';
 
 const props = defineProps({
   selected: Array,
@@ -26,14 +27,7 @@ const props = defineProps({
 const emit = defineEmits(['update:selected']);
 
 const replyOptions = computed(() => {
-  const optionsMap = {
-    1: ['Ужасно', 'Не понравилось', 'Жесть', 'Всё плохо', 'Фу фу фу', 'Отвратительно'],
-    2: ['Не очень', 'Делал и лучше', 'Так себе', 'Слабовато', 'Могло быть лучше'],
-    3: ['Нормик', 'Средне', 'Пойдёт', 'Обычно', 'Ничего особенного', 'Пупупу...'],
-    4: ['Прикольно', 'Интересно', 'Хорошо', 'Зашло', 'Круто', 'Стильно, модно, молодежно'],
-    5: ['Вааау', 'Супер!', 'Топчик', 'Бомба', 'Шикарно', 'Мама, я в раю']
-  };
-  return optionsMap[props.rating] || [];
+  return quickRepliesMap[props.rating] || [];
 });
 
 const toggleOption = (option) => {

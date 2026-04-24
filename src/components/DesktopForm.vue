@@ -81,17 +81,11 @@ import PhoneInput from '@/components/fields/PhoneInput.vue';
 import RatingStars from '@/components/fields/RatingStars.vue';
 import QuickReplies from '@/components/fields/QuickReplies.vue';
 import CustomSelect from "@/components/UI/CustomSelect.vue";
+import { gradeOptions } from '@/constants/feedbackFormConstants.js';
 
 const emit = defineEmits(['cancel', 'submit']);
 
 const { formData, updateFormData } = useFeedbackForm();
-
-const gradeOptions = [
-  { value: 'junior', label: 'Junior' },
-  { value: 'middle', label: 'Middle' },
-  { value: 'senior', label: 'Senior' },
-  { value: 'lead', label: 'Team lead' }
-];
 
 const updateField = (field, value) => {
   updateFormData({ [field]: value });
