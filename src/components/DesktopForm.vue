@@ -6,6 +6,7 @@
             :rating="formData.rating"
             @update:rating="(val) => updateField('rating', val)"
         />
+        <span v-if="errors.rating" class="form-field__error">{{ errors.rating }}</span>
       </div>
       <div class="form-field" v-show="formData.rating > 0">
         <QuickReplies
@@ -20,6 +21,7 @@
             :modelValue="formData.fullName"
             @update:modelValue="(val) => updateField('fullName', val)"
             placeholder="Иван Иванов"
+            :error="errors.fullName"
         />
         <FieldInput
             label="Почта"
@@ -27,6 +29,7 @@
             :modelValue="formData.email"
             @update:modelValue="(val) => updateField('email', val)"
             placeholder="example@mail.com"
+            :error="errors.email"
         />
       </div>
       <div class="form-fields-row">
@@ -34,6 +37,7 @@
             label="Номер телефона"
             :modelValue="formData.phone"
             @update:modelValue="(val) => updateField('phone', val)"
+            :error="errors.phone"
         />
         <div class="form-field">
           <label class="form-field__label">Грейд</label>
@@ -43,6 +47,7 @@
               placeholder="Выберите"
               @update:modelValue="(val) => updateField('grade', val)"
           />
+          <span v-if="errors.grade" class="form-field__error">{{ errors.grade }}</span>
         </div>
       </div>
       <TextareaInput
@@ -55,10 +60,10 @@
     </div>
 
     <div class="form__actions form__actions-desktop">
-      <button class="button button--secondary" @click="emit('cancel')">
+      <button class="button button--secondary" type="button" @click="emit('cancel')">
         Отменить
       </button>
-      <button class="button button--primary" @click="emit('submit')">
+      <button class="button button--primary" type="submit" @click.prevent="handleSubmit">
         Отправить
       </button>
     </div>
@@ -75,11 +80,22 @@ import { gradeOptions } from '@/constants/feedbackFormConstants.js';
 import FieldInput from "@/components/fields/FieldInput.vue";
 import TextareaInput from "@/components/fields/TextareaInput.vue";
 
-const emit = defineEmits(['cancel', 'submit']);
+const emit = defineEmits(['cancel', 'submit'])
 
-const { formData, updateFormData } = useFeedbackForm();
+const { formData, updateFormData, errors, debouncedValidateField, validateStep1, validateStep2 } = useFeedbackForm()
 
 const updateField = (field, value) => {
-  updateFormData({ [field]: value });
-};
+  updateFormData({ [field]: value })
+  if (field in errors) {
+    debouncedValidateField(field, value)
+  }
+}
+
+const handleSubmit = () => {
+  const isStep1Valid = validateStep1()
+  const isStep2Valid = validateStep2()
+  if (isStep1Valid && isStep2Valid) {
+    emit('submit')
+  }
+}
 </script>

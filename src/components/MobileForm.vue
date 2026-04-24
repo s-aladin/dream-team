@@ -7,6 +7,7 @@
             :modelValue="formData.fullName"
             @update:modelValue="(val) => updateField('fullName', val)"
             placeholder="Иван Иванов"
+            :error="errors.fullName"
         />
         <FieldInput
             label="Почта"
@@ -14,11 +15,13 @@
             :modelValue="formData.email"
             @update:modelValue="(val) => updateField('email', val)"
             placeholder="example@mail.com"
+            :error="errors.email"
         />
         <PhoneInput
             label="Номер телефона"
             :modelValue="formData.phone"
             @update:modelValue="(val) => updateField('phone', val)"
+            :error="errors.phone"
         />
       </div>
 
@@ -28,6 +31,7 @@
               :rating="formData.rating"
               @update:rating="(val) => updateField('rating', val)"
           />
+          <span v-if="errors.rating" class="form-field__error">{{ errors.rating }}</span>
         </div>
         <div class="form-field">
           <QuickReplies
@@ -51,6 +55,7 @@
               placeholder="Выберите"
               @update:modelValue="(val) => updateField('grade', val)"
           />
+          <span v-if="errors.grade" class="form-field__error">{{ errors.grade }}</span>
         </div>
       </div>
     </transition>
@@ -82,24 +87,28 @@ import { gradeOptions } from '@/constants/feedbackFormConstants.js';
 import FieldInput from "@/components/fields/FieldInput.vue";
 import TextareaInput from "@/components/fields/TextareaInput.vue";
 
-const emit = defineEmits(['cancel', 'submit', 'error']);
+const emit = defineEmits(['cancel', 'submit']);
 
 const step = ref(1);
 const direction = ref('forward');
-const { formData, updateFormData, validateStep1 } = useFeedbackForm();
+const { formData, updateFormData, errors, debouncedValidateField, validateStep1, validateStep2, clearErrors } = useFeedbackForm()
 
 const updateField = (field, value) => {
-  updateFormData({ [field]: value });
-};
+  updateFormData({ [field]: value })
+
+  if (field in errors) {
+    debouncedValidateField(field, value)
+  }
+}
 
 const goToStep2 = () => {
+  clearErrors(['grade', 'rating']);
+
   if (validateStep1()) {
     direction.value = 'forward';
     step.value = 2;
-  } else {
-    emit('error');
   }
-};
+}
 
 const step1Progress = computed(() => {
   const fields = [
@@ -125,6 +134,12 @@ const handleBack = () => {
 };
 
 const handleSubmit = () => {
-  step.value === 2 ? emit('submit') : goToStep2();
+  if (step.value === 1) {
+    goToStep2();
+  } else {
+    if (validateStep2()) {
+      emit('submit');
+    }
+  }
 };
 </script>

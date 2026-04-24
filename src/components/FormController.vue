@@ -15,7 +15,7 @@
       </div>
 
       <DesktopForm v-if="!isMobile" @cancel="handleCancel" @submit="handleSubmit" />
-      <MobileForm v-else @cancel="handleCancel" @submit="handleSubmit" @error="handleError" />
+      <MobileForm v-else @cancel="handleCancel" @submit="handleSubmit" />
     </div>
   </transition>
 </template>
@@ -73,11 +73,6 @@ const handleCancel = () => {
   resetForm();
   isError.value = false;
   showResultScreen.value = false;
-};
-
-const handleError = () => {
-  isError.value = true;
-  showResultScreen.value = true;
 };
 
 const handleBackFromResult = () => {

@@ -4,6 +4,7 @@
     <input
         ref="inputRef"
         class="form-field__input"
+        :class="{ 'form-field__input--error': error }"
         type="tel"
         :value="displayValue"
         @input="handleInput"
@@ -11,6 +12,7 @@
         @blur="onBlur"
         :placeholder="placeholder"
     />
+    <span v-if="error" class="form-field__error">{{ error }}</span>
   </div>
 </template>
 
@@ -20,7 +22,8 @@ import { ref, computed } from 'vue';
 const props = defineProps({
   modelValue: { type: String, default: '' },
   label: { type: String, default: '' },
-  placeholder: { type: String, default: '+7 (000) 000 00 00' }
+  placeholder: { type: String, default: '+7 (000) 000 00 00' },
+  error: { type: String, default: '' }
 });
 
 const emit = defineEmits(['update:modelValue']);
